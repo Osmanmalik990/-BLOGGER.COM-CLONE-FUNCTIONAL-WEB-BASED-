@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Blogger Clone</title>
+<style>
+:root{--bg:#f5f5f5;--pn:#fff;--fg:#212121;--mut:#757575;--line:#e0e0e0;--or:#ff5722;--or2:#e64a19;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171717;--pn:#222;--fg:#eee;--mut:#9e9e9e;--line:#363636;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#171717;--pn:#222;--fg:#eee;--mut:#9e9e9e;--line:#363636;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 "Segoe UI",Roboto,Arial,sans-serif}
+button{font:inherit;cursor:pointer}a{color:inherit;text-decoration:none}
+.top{background:var(--pn);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px 16px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+.mk{background:var(--or);color:#fff;font:700 20px/1 Georgia,serif;width:34px;height:34px;border-radius:8px;display:grid;place-items:center}
+.top b{font-size:20px}.sp{flex:1}
+.btn{border:1px solid var(--line);background:var(--pn);color:var(--fg);border-radius:4px;padding:7px 14px;font-weight:600}
+.btn:hover{border-color:var(--or)}
+.pri{background:var(--or);color:#fff;border-color:var(--or)}.pri:hover{background:var(--or2)}
+.danger{color:#d32f2f}
+.wrap{display:grid;grid-template-columns:230px 1fr;min-height:calc(100vh - 56px)}
+aside{background:var(--pn);border-right:1px solid var(--line);padding:14px 10px}
+aside a{display:block;padding:10px 14px;border-radius:0 20px 20px 0;font-weight:600;color:var(--mut);margin-right:10px}
+aside a:hover{background:var(--bg)}aside a.on{background:rgba(255,87,34,.14);color:var(--or)}
+aside .nb{width:100%;margin-bottom:14px;padding:11px;border-radius:22px;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+main{padding:22px;max-width:980px;width:100%}
+h2{margin:0 0 14px;font-weight:500;font-size:24px}
+.tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.tabs .btn.on{background:var(--or);color:#fff;border-color:var(--or)}
+.inp{border:1px solid var(--line);background:var(--pn);color:var(--fg);border-radius:4px;padding:8px 10px;font:inherit;width:100%}
+.inp:focus,.ed:focus{outline:2px solid var(--or);outline-offset:-1px}
+.list{background:var(--pn);border:1px solid var(--line);border-radius:6px}
+.row{display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);align-items:center}
+.row:last-child{border:0}.row .t{flex:1;min-width:0}.row .t a{font-weight:600;color:var(--or);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mt{color:var(--mut);font-size:13px}
+.pill{font-size:12px;padding:2px 8px;border-radius:10px;background:var(--bg);border:1px solid var(--line);color:var(--mut)}
+.pill.pub{background:#e8f5e9;color:#2e7d32;border-color:#c8e6c9}
+.acts{display:flex;gap:6px}.acts .btn{padding:4px 10px;font-size:13px}
+.tool{display:flex;gap:4px;flex-wrap:wrap;padding:8px;background:var(--pn);border:1px solid var(--line);border-bottom:0;border-radius:6px 6px 0 0}
+.tool button{min-width:34px;padding:5px 8px;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:4px}
+.tool button:hover{border-color:var(--or)}
+.ed{min-height:320px;background:var(--pn);border:1px solid var(--line);border-radius:0 0 6px 6px;padding:16px;font:17px/1.7 Georgia,serif}
+.ed img,.bp img{max-width:100%}.ed blockquote,.bp blockquote{border-left:4px solid var(--or);margin:12px 0;padding:2px 14px;color:var(--mut)}
+.til{font-size:28px;font-weight:500;border:0;border-bottom:2px solid var(--line);background:transparent;color:var(--fg);width:100%;padding:8px 2px;margin-bottom:12px;font-family:inherit}
+.til:focus{outline:0;border-color:var(--or)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:18px}
+.st{background:var(--pn);border:1px solid var(--line);border-radius:6px;padding:16px}.st b{font-size:30px;color:var(--or);display:block}
+.bar{height:10px;background:var(--or);border-radius:5px;min-width:3px}
+.empty{padding:40px;text-align:center;color:var(--mut)}
+.field{margin-bottom:14px}.field label{display:block;font-weight:600;margin-bottom:4px}
+/* public blog */
+.bv{--b-bg:#fff;--b-fg:#222;--b-ac:#ff5722;--b-hd:#fafafa;background:var(--b-bg);color:var(--b-fg);min-height:100vh}
+.bv[data-t="midnight"]{--b-bg:#10131a;--b-fg:#e6e8ee;--b-ac:#7aa2ff;--b-hd:#171b25}
+.bv[data-t="ocean"]{--b-bg:#f2fafb;--b-fg:#12333a;--b-ac:#00838f;--b-hd:#d9f1f3}
+.bh{background:var(--b-hd);padding:40px 20px;text-align:center;border-bottom:1px solid rgba(128,128,128,.25)}
+.bh h1{margin:0;font:700 38px Georgia,serif}.bh p{margin:6px 0 0;opacity:.7}
+.bb{max-width:1000px;margin:auto;padding:26px 20px;display:grid;grid-template-columns:1fr 240px;gap:36px}
+.bp{margin-bottom:38px;padding-bottom:26px;border-bottom:1px solid rgba(128,128,128,.25)}
+.bp h2{font:700 28px Georgia,serif;margin:4px 0 6px}.bp h2 a{color:var(--b-ac)}
+.bp .body{font:18px/1.75 Georgia,serif}
+.lb{display:inline-block;margin:6px 6px 0 0;padding:2px 10px;border:1px solid var(--b-ac);color:var(--b-ac);border-radius:12px;font-size:13px;cursor:pointer;background:none}
+.bs h3{font-size:15px;border-bottom:2px solid var(--b-ac);padding-bottom:4px}
+.bs li{cursor:pointer;margin:6px 0;color:var(--b-ac)}.bs ul{padding-left:18px}
+.cm{padding:10px 0;border-top:1px solid rgba(128,128,128,.25)}
+.bv .inp{background:transparent;color:inherit;margin-bottom:8px}
+.bv .btn{background:var(--b-ac);color:#fff;border-color:var(--b-ac)}
+.bvt{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));right:10px;z-index:9}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#222;color:#fff;padding:10px 18px;border-radius:6px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:20}#toast.on{opacity:1}
+@media(max-width:760px){.wrap{grid-template-columns:1fr}aside{display:flex;overflow-x:auto;gap:4px;padding:8px;border:0;border-bottom:1px solid var(--line)}aside a{border-radius:20px;white-space:nowrap;margin:0}aside .nb{width:auto;margin:0}.bb{grid-template-columns:1fr}main{padding:14px}.row{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<div id="root"></div><div id="toast"></div>
+<script>
+const $=s=>document.querySelector(s),R=$("#root");
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const D=t=>new Date(t).toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});
+let mem=null;
+function seed(){const n=Date.now();return{blog:{title:"My First Blog",desc:"Thoughts, stories and ideas",author:"You",theme:"simple"},posts:[
+{id:"p1",title:"Welcome to my blog",body:"<p>This is my <b>first post</b>. Write with the editor, add labels and hit <i>Publish</i>.</p><blockquote>Every blog starts with a single post.</blockquote>",labels:["Welcome"],status:"pub",date:n-864e5,views:12,comments:[{n:"Sara",t:"Great start!",d:n-4e7}]},
+{id:"p2",title:"Ideas for next week",body:"<p>A draft with some half-formed thoughts.</p>",labels:["Notes"],status:"draft",date:n-36e5,views:0,comments:[]}]}}
+function load(){try{const v=localStorage.getItem("bl");if(v)return JSON.parse(v)}catch(e){}return mem||seed()}
+let S=load();
+function save(){mem=S;try{localStorage.setItem("bl",JSON.stringify(S))}catch(e){}}
+function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("on");setTimeout(()=>e.classList.remove("on"),1800)}
+let tab="all",q="",lab=null,confirmId=null;
+function shell(on,html){
+  const l=[["posts","Posts"],["stats","Stats"],["settings","Settings"],["blog","View blog"]];
+  R.innerHTML=`<div class="top"><div class="mk">B</div><b>Blogger Clone</b><span class="sp"></span><span class="mt">${esc(S.blog.title)}</span><button class="btn" id="th">Theme</button></div>
+  <div class="wrap"><aside><button class="btn pri nb" onclick="location.hash='new'">+ New post</button>${l.map(([h,t])=>`<a href="#${h}" class="${on===h?"on":""}">${t}</a>`).join("")}</aside><main>${html}</main></div>`;
+  $("#th").onclick=()=>{const d=document.documentElement,dk=d.dataset.theme?d.dataset.theme==="dark":matchMedia("(prefers-color-scheme:dark)").matches;d.dataset.theme=dk?"light":"dark"};
+}
+function posts(){
+  let L=S.posts.filter(p=>(tab==="all"||p.status===tab)&&(p.title+p.body+p.labels.join(" ")).toLowerCase().includes(q.toLowerCase())).sort((a,b)=>b.date-a.date);
+  const cnt=k=>k==="all"?S.posts.length:S.posts.filter(p=>p.status===k).length;
+  shell("posts",`<h2>Posts</h2><div class="tabs">${[["all","All"],["pub","Published"],["draft","Drafts"]].map(([k,t])=>`<button class="btn ${tab===k?"on":""}" data-tab="${k}">${t} (${cnt(k)})</button>`).join("")}<input class="inp" id="sq" placeholder="Search posts" value="${esc(q)}" style="max-width:240px;margin-left:auto"></div>
+  <div class="list">${L.length?L.map(p=>`<div class="row"><div class="t"><a href="#edit-${p.id}">${esc(p.title||"(Untitled)")}</a><span class="mt">${D(p.date)} · ${p.views} views · ${p.comments.length} comments ${p.labels.map(x=>`<span class="pill">${esc(x)}</span>`).join(" ")}</span></div><span class="pill ${p.status==="pub"?"pub":""}">${p.status==="pub"?"Published":"Draft"}</span>
+  <div class="acts"><button class="btn" data-tg="${p.id}">${p.status==="pub"?"Unpublish":"Publish"}</button><button class="btn" onclick="location.hash='edit-${p.id}'">Edit</button><button class="btn danger" data-del="${p.id}">${confirmId===p.id?"Sure?":"Delete"}</button></div></div>`).join(""):'<div class="empty">No posts here yet. Click “New post” to write one.</div>'}</div>`);
+  const sq=$("#sq");sq.oninput=e=>{q=e.target.value;const pos=sq.selectionStart;posts();const n=$("#sq");n.focus();n.setSelectionRange(pos,pos)};
+  R.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{tab=b.dataset.tab;posts()});
+  R.querySelectorAll("[data-tg]").forEach(b=>b.onclick=()=>{const p=S.posts.find(x=>x.id===b.dataset.tg);p.status=p.status==="pub"?"draft":"pub";save();toast(p.status==="pub"?"Published":"Moved to drafts");posts()});
+  R.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{if(confirmId===b.dataset.del){S.posts=S.posts.filter(x=>x.id!==confirmId);confirmId=null;save();toast("Post deleted")}else confirmId=b.dataset.del;posts()});
+}
+function editor(id){
+  let p=S.posts.find(x=>x.id===id);
+  if(!p){p={id:"p"+Date.now(),title:"",body:"",labels:[],status:"draft",date:Date.now(),views:0,comments:[]};}
+  const tools=[["bold","B"],["italic","I"],["underline","U"],["formatBlock:h2","H"],["formatBlock:blockquote","❝"],["insertUnorderedList","• List"],["insertOrderedList","1. List"],["justifyLeft","⇤"],["justifyCenter","↔"],["removeFormat","Tx"]];
+  shell("posts",`<h2>${S.posts.includes(p)?"Edit post":"New post"}</h2><input class="til" id="pt" placeholder="Title" value="${esc(p.title)}">
+  <div class="tool">${tools.map(([c,l])=>`<button data-c="${c}" type="button">${l}</button>`).join("")}<button data-ins="createLink" type="button">Link</button><button data-ins="insertImage" type="button">Image</button></div>
+  <div id="ins" style="display:none;gap:6px;padding:8px;background:var(--pn);border:1px solid var(--line);border-bottom:0"><input class="inp" id="iu" placeholder="https://…"><button class="btn pri" id="io">Insert</button></div>
+  <div class="ed" id="eb" contenteditable="true">${p.body}</div>
+  <div class="field" style="margin-top:14px"><label>Labels (comma separated)</label><input class="inp" id="pl" value="${esc(p.labels.join(", "))}"></div>
+  <div class="acts" style="gap:8px"><button class="btn pri" id="pb">Publish</button><button class="btn" id="sd">Save draft</button><button class="btn" id="pv">Preview</button><button class="btn" onclick="location.hash='posts'">Close</button><span class="mt" id="as"></span></div>`);
+  let range=null;const eb=$("#eb");
+  const collect=st=>{p.title=$("#pt").value.trim();p.body=eb.innerHTML;p.labels=$("#pl").value.split(",").map(s=>s.trim()).filter(Boolean);p.date=p.date||Date.now();if(st)p.status=st;if(!S.posts.includes(p))S.posts.push(p);save()};
+  R.querySelectorAll("[data-c]").forEach(b=>b.onmousedown=e=>{e.preventDefault();const[c,v]=b.dataset.c.split(":");document.execCommand(c,false,v||null)});
+  R.querySelectorAll("[data-ins]").forEach(b=>b.onclick=()=>{const s=getSelection();range=s.rangeCount?s.getRangeAt(0):null;$("#ins").style.display="flex";$("#io").dataset.k=b.dataset.ins;$("#iu").focus()});
+  $("#io").onclick=()=>{const u=$("#iu").value.trim();if(!u)return;eb.focus();const s=getSelection();if(range){s.removeAllRanges();s.addRange(range)}document.execCommand($("#io").dataset.k,false,u);$("#iu").value="";$("#ins").style.display="none"};
+  $("#pb").onclick=()=>{if(!$("#pt").value.trim()){toast("Add a title first");return}collect("pub");toast("Published");location.hash="posts"};
+  $("#sd").onclick=()=>{collect(p.status==="pub"?"pub":"draft");toast("Saved");$("#as").textContent="Saved just now"};
+  $("#pv").onclick=()=>{collect(p.status);location.hash="read-"+p.id};
+  let t;[eb,$("#pt"),$("#pl")].forEach(el=>el.oninput=()=>{clearTimeout(t);t=setTimeout(()=>{if($("#pt").value.trim()||eb.textContent.trim()){collect(p.status);$("#as").textContent="Autosaved"}},1200)});
+}
+function stats(){
+  const pub=S.posts.filter(p=>p.status==="pub"),v=S.posts.reduce((a,p)=>a+p.views,0),c=S.posts.reduce((a,p)=>a+p.comments.length,0),mx=Math.max(1,...S.posts.map(p=>p.views));
+  shell("stats",`<h2>Stats</h2><div class="cards"><div class="st"><b>${v}</b>Total views</div><div class="st"><b>${pub.length}</b>Published</div><div class="st"><b>${S.posts.length-pub.length}</b>Drafts</div><div class="st"><b>${c}</b>Comments</div></div>
+  <div class="list">${S.posts.map(p=>`<div class="row"><div class="t" style="flex:0 0 38%">${esc(p.title||"(Untitled)")}</div><div style="flex:1"><div class="bar" style="width:${p.views/mx*100}%"></div></div><span class="mt">${p.views}</span></div>`).join("")||'<div class="empty">No data yet.</div>'}</div>`);
+}
+function settings(){
+  const b=S.blog;
+  shell("settings",`<h2>Settings</h2><div class="list" style="padding:18px"><div class="field"><label>Blog title</label><input class="inp" id="bt" value="${esc(b.title)}"></div><div class="field"><label>Description</label><input class="inp" id="bd" value="${esc(b.desc)}"></div><div class="field"><label>Author name</label><input class="inp" id="ba" value="${esc(b.author)}"></div>
+  <div class="field"><label>Blog theme</label><select class="inp" id="bth">${[["simple","Simple"],["midnight","Midnight"],["ocean","Ocean"]].map(([k,t])=>`<option value="${k}" ${b.theme===k?"selected":""}>${t}</option>`).join("")}</select></div>
+  <button class="btn pri" id="sv">Save settings</button> <button class="btn danger" id="rs">${confirmId==="reset"?"Sure? Erase everything":"Reset all data"}</button></div>`);
+  $("#sv").onclick=()=>{S.blog={title:$("#bt").value||"Untitled blog",desc:$("#bd").value,author:$("#ba").value||"Anonymous",theme:$("#bth").value};save();toast("Settings saved");settings()};
+  $("#rs").onclick=()=>{if(confirmId==="reset"){S=seed();save();confirmId=null;toast("Data reset")}else confirmId="reset";settings()};
+}
+function blog(id){
+  const pub=S.posts.filter(p=>p.status==="pub"||p.id===id).sort((a,b)=>b.date-a.date),one=id&&S.posts.find(p=>p.id===id);
+  let list=one?[one]:pub.filter(p=>!lab||p.labels.includes(lab));
+  const all=[...new Set(pub.flatMap(p=>p.labels))];
+  if(one&&!one.viewed){one.views++;one.viewed=1;save()}
+  R.innerHTML=`<div class="bv" data-t="${S.blog.theme}"><div class="bvt"><button class="btn" onclick="location.hash='posts'">← Dashboard</button></div>
+  <div class="bh"><h1><a href="#blog" onclick="lab=null">${esc(S.blog.title)}</a></h1><p>${esc(S.blog.desc)}</p></div>
+  <div class="bb"><div>${lab&&!one?`<p>Showing label: <b>${esc(lab)}</b> <button class="lb" id="cl">clear</button></p>`:""}${list.map(p=>`<article class="bp"><div class="mt">${D(p.date)} · by ${esc(S.blog.author)}${p.status!=="pub"?" · <b>Draft preview</b>":""}</div><h2><a href="#read-${p.id}">${esc(p.title||"(Untitled)")}</a></h2><div class="body">${one?p.body:p.body.length>600?p.body.slice(0,600)+"…":p.body}</div>${p.labels.map(x=>`<button class="lb" data-l="${esc(x)}">${esc(x)}</button>`).join("")}
+  ${one?`<div style="margin-top:26px"><h3>${p.comments.length} comment${p.comments.length===1?"":"s"}</h3>${p.comments.map(c=>`<div class="cm"><b>${esc(c.n)}</b> <span class="mt">${D(c.d)}</span><div>${esc(c.t)}</div></div>`).join("")}<div style="margin-top:12px"><input class="inp" id="cn" placeholder="Your name"><textarea class="inp" id="ct" rows="3" placeholder="Write a comment"></textarea><button class="btn" id="cs">Post comment</button></div></div>`:`<div class="mt" style="margin-top:8px">${p.comments.length} comments</div>`}</article>`).join("")||'<div class="empty">No published posts yet.</div>'}</div>
+  <div class="bs"><h3>About</h3><p>${esc(S.blog.author)}</p><h3>Labels</h3><ul>${all.map(x=>`<li data-l="${esc(x)}">${esc(x)}</li>`).join("")||"<li>None</li>"}</ul><h3>Archive</h3><ul>${pub.map(p=>`<li onclick="location.hash='read-${p.id}'">${esc(p.title||"(Untitled)")}</li>`).join("")}</ul></div></div></div>`;
+  R.querySelectorAll("[data-l]").forEach(e=>e.onclick=()=>{lab=e.dataset.l;if(one)location.hash="blog";else blog()});
+  const cl=$("#cl");if(cl)cl.onclick=()=>{lab=null;blog()};
+  const cs=$("#cs");if(cs)cs.onclick=()=>{const t=$("#ct").value.trim();if(!t){toast("Write something first");return}one.comments.push({n:$("#cn").value.trim()||"Anonymous",t,d:Date.now()});save();blog(id)};
+}
+function route(){
+  const h=(location.hash||"#posts").slice(1);confirmId=null;scrollTo(0,0);
+  if(h==="new")editor("");else if(h.startsWith("edit-"))editor(h.slice(5));else if(h.startsWith("read-"))blog(h.slice(5));
+  else if(h==="blog"){blog()}else if(h==="stats")stats();else if(h==="settings")settings();else posts();
+}
+window.addEventListener("hashchange",route);route();
+</script>
+</body>
+</html>
